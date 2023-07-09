@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkvbEtitcha7SYSrUXwncayqf5013jyAGVx1nbZdbb&s" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Pesticide</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    #data-container {
+      margin-top: 30px;
+    }
+
+    #data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #data-table th,
+    #data-table td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+
+    #data-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Search Pesticide</h1>
+  <form id="search-form">
+    <label for="date-input">Search by Date:</label>
+    <input type="date" id="date-input">
+    <br>
+    <label for="pesticide-input">Search by Pesticide:</label>
+    <input type="text" id="pesticide-input">
+    <br>
+    <button type="submit">Search</button>
+  </form>
+  <br>
+  <div id="data-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get the input values
+      const date = document.getElementById('date-input').value;
+      const pesticide = document.getElementById('pesticide-input').value;
+
+      // Make an API request to retrieve data
+      const url = 'https://sheets.googleapis.com/v4/spreadsheets/1ie83mP01viUZL7KZcRXr6dHpCgxFZl1vimwoUE2_uRo/values/Pesticide!A1:D100?key=AIzaSyAUG7ufFjEGIDuDtFAi2rCufLKA4sBgDmg';
+      axios.get(url)
+        .then(function(response) {
+          const data = response.data.values;
+          const filteredData = [];
+
+          // Filter data based on the input values
+          for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+            const rowData = {
+              pesticide: row[0],
+              gram_ml: row[1],
+              date: row[2],
+              description: row[3]
+            };
+
+            if ((date && rowData.date === date) || (pesticide && rowData.pesticide.toLowerCase().includes(pesticide.toLowerCase()))) {
+              filteredData.push(rowData);
+            }
+          }
+
+          // Display the filtered data
+          const dataContainer = document.getElementById('data-container');
+          dataContainer.innerHTML = '';
+
+          if (filteredData.length > 0) {
+            const table = document.createElement('table');
+            table.id = 'data-table';
+
+            // Create table header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            const headers = ['Pesticide Name', 'Gram/ML', 'Date', 'Description'];
+
+            for (let i = 0; i < headers.length; i++) {
+              const th = document.createElement('th');
+              th.textContent = headers[i];
+              headerRow.appendChild(th);
+            }
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create table rows
+            const tbody = document.createElement('tbody');
+
+            for (let i = 0; i < filteredData.length; i++) {
+              const rowData = filteredData[i];
+              const row = document.createElement('tr');
+
+              const pesticideCell = document.createElement('td');
+              pesticideCell.textContent = rowData.pesticide;
+              row.appendChild(pesticideCell);
+
+              const gramMlCell = document.createElement('td');
+              gramMlCell.textContent = rowData.gram_ml;
+              row.appendChild(gramMlCell);
+
+              const dateCell = document.createElement('td');
+              dateCell.textContent = rowData.date;
+              row.appendChild(dateCell);
+
+              const descriptionCell = document.createElement('td');
+              descriptionCell.textContent = rowData.description;
+              row.appendChild(descriptionCell);
+
+              tbody.appendChild(row);
+            }
+
+            table.appendChild(tbody);
+            dataContainer.appendChild(table);
+          } else {
+            const message = document.createElement('p');
+            message.textContent = 'No data found.';
+            dataContainer.appendChild(message);
+          }
+        })
+        .catch(function(error) {
+          console.error(error);
+          const dataContainer = document.getElementById('data-container');
+          dataContainer.innerHTML = '<p>An error occurred. Please try again.</p>';
+        });
+    });
+  </script>
+</body>
+</html>
