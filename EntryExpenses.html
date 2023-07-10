@@ -3,18 +3,19 @@
 <head>
   <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkvbEtitcha7SYSrUXwncayqf5013jyAGVx1nbZdbb&s" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entry Expenses </title>
+  <title>Entry Expenses</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
   <style>
     input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    margin-bottom: 15px;
-    resize: vertical;
-  }
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      resize: vertical;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
       margin: 20px;
@@ -25,6 +26,16 @@
     h1 {
       text-align: center;
       margin-bottom: 30px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .header .username {
+      margin-right: 10px;
     }
 
     form {
@@ -123,9 +134,41 @@
     .background-overlay.show {
       display: block;
     }
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.header .username {
+  margin-right: 10px;
+  color: #333;
+  font-weight: bold;
+}
+
+.header button {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.header button:hover {
+  background-color: #d32f2f;
+}
+
   </style>
 </head>
 <body>
+  <div class="header">
+    <div class="username" id="username"></div>
+    <button onclick="logout()">Logout</button>
+  </div>
+
   <h1>Entry Expenses</h1>
   <form id="expenseForm">
     <label for="title">Title:</label>
@@ -155,6 +198,17 @@
   <div id="backgroundOverlay" class="background-overlay"></div>
 
   <script>
+    window.onload = function() {
+      const usernameElement = document.getElementById('username');
+      const loggedUser = localStorage.getItem('loggedUser');
+
+      if (loggedUser) {
+        usernameElement.textContent = 'Logged in as: ' + loggedUser;
+      } else {
+        window.location.href = 'index.html'; // Redirect to index.html if not logged in
+      }
+    }
+
     document.getElementById("expenseForm").addEventListener("submit", function(e) {
       e.preventDefault();
       var form = e.target;
@@ -206,6 +260,11 @@
 
     function hideOverlay() {
       document.getElementById("backgroundOverlay").classList.remove("show");
+    }
+
+    function logout() {
+      localStorage.removeItem('loggedUser');
+      window.location.href = 'index.html';
     }
   </script>
 </body>
