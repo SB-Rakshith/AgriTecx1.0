@@ -72,9 +72,39 @@
         opacity: 1;
       }
     }
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .header .username {
+      margin-right: 10px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .header button {
+      background-color: #f44336;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .header button:hover {
+      background-color: #d32f2f;
+    }
   </style>
 </head>
 <body>
+  <div class="header">
+    <span class="username" id="username"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+
   <h1>Total Listed Expenses</h1>
 
   <h2 id="total-expenses"></h2>
@@ -94,49 +124,65 @@
   </div>
 
   <script>
-    // Make a GET request to fetch data from Google Sheets API
-    fetch("https://sheets.googleapis.com/v4/spreadsheets/1ie83mP01viUZL7KZcRXr6dHpCgxFZl1vimwoUE2_uRo/values/Expenses!A:F?key=AIzaSyAUG7ufFjEGIDuDtFAi2rCufLKA4sBgDmg")
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        var rows = data.values;
-        var tbody = document.getElementById("data-body");
-        var totalExpenses = document.getElementById("total-expenses");
+    window.onload = function() {
+      var usernameElement = document.getElementById('username');
+      var loggedUser = localStorage.getItem('loggedUser');
 
-        // Exclude the first row
-        rows.shift();
+      if (loggedUser) {
+        usernameElement.textContent = "Logged in as: " + loggedUser;
+      } else {
+        window.location.href = 'index.html';
+      }
+      
+      fetchData();
+    }
 
-        // Reverse the order of rows
-        rows.reverse();
+    function fetchData() {
+      // Make a GET request to fetch data from Google Sheets API
+      fetch("https://sheets.googleapis.com/v4/spreadsheets/1ie83mP01viUZL7KZcRXr6dHpCgxFZl1vimwoUE2_uRo/values/Expenses!A:F?key=AIzaSyAUG7ufFjEGIDuDtFAi2rCufLKA4sBgDmg")
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          var rows = data.values;
+          var tbody = document.getElementById("data-body");
+          var totalExpenses = document.getElementById("total-expenses");
 
-        var totalAmount = 0;
-        for (var i = 0; i < rows.length; i++) {
-          var row = rows[i];
-          var rowHtml = "<tr>";
+          // Clear the existing data
+          tbody.innerHTML = "";
 
-          // Adjust the column indices according to the order in the sheet
-          var title = row[0];
-          var date = row[1];
-          var amount = parseFloat(row[2]);
-          var remarks = row[3] || "";
+          // Exclude the first row (header)
+          rows.shift();
 
-          rowHtml += "<td>" + title + "</td>";
-          rowHtml += "<td>" + date + "</td>";
-          rowHtml += "<td>" + amount + "</td>";
-          rowHtml += "<td>" + remarks + "</td>";
+          var totalAmount = 0;
+          rows.forEach(function(row) {
+            var title = row[0];
+            var date = row[1];
+            var amount = parseFloat(row[2]);
+            var remarks = row[3] || "";
 
-          rowHtml += "</tr>";
-          tbody.innerHTML += rowHtml;
+            var rowHtml = "<tr>";
+            rowHtml += "<td>" + title + "</td>";
+            rowHtml += "<td>" + date + "</td>";
+            rowHtml += "<td>" + amount + "</td>";
+            rowHtml += "<td>" + remarks + "</td>";
+            rowHtml += "</tr>";
 
-          totalAmount += amount;
-        }
+            tbody.innerHTML += rowHtml;
+            totalAmount += amount;
+          });
 
-        totalExpenses.innerHTML = "Total Expenses: <span class='blink' style='color: red;'>₹" + totalAmount.toFixed(2) + "</span>";
-      })
-      .catch(function(error) {
-        console.error(error);
-      });
+          totalExpenses.innerHTML = "Total Expenses: <span class='blink' style='color: red;'>₹" + totalAmount.toFixed(2) + "</span>";
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    }
+
+    function logout() {
+      localStorage.removeItem('loggedUser');
+      window.location.href = 'index.html';
+    }
   </script>
 </body>
 </html>
