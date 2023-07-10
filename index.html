@@ -3,143 +3,235 @@
 <head>
   <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkvbEtitcha7SYSrUXwncayqf5013jyAGVx1nbZdbb&s" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pomegranate Data Management</title>
+  <title>Pomegranate Data Management Login</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
   <style>
+    /* Common Styles */
     body {
       font-family: 'Montserrat', sans-serif;
-      margin: 0;
+      margin: 20px;
       padding: 0;
-    }
-    
-    .background-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-      opacity: 0.5; /* Adjust the opacity value (between 0 and 1) to change transparency */
-    }
-    
-    .background-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .content-container {
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
-      border-radius: 10px; /* Add rounded corners */
-      max-width: 500px; /* Limit the content width */
-      margin: 0 auto; /* Center the content horizontally */
-      margin-top: 80px; /* Add top margin for spacing */
-      animation: fade-in 1s ease; /* Add fade-in animation */
-    }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      background-color: #f2f2f2;
     }
 
     h1 {
       text-align: center;
-      color: #333; /* Change the heading color */
-      margin-bottom: 30px; /* Add bottom margin for spacing */
+      margin-bottom: 30px;
     }
 
-    .section {
-      margin-bottom: 40px;
-      text-align: center; /* Center the section heading */
-      opacity: 0;
-      animation: fade-in 1s ease forwards; /* Add fade-in animation */
+    /* Login Form Styles */
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     }
 
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    label {
+      display: block;
+      margin-bottom: 8px;
     }
 
-    .section:nth-child(1) {
-      animation-delay: 0.3s; /* Delay the animation of the first section */
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      resize: vertical;
     }
 
-    .section:nth-child(2) {
-      animation-delay: 0.6s; /* Delay the animation of the second section */
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .button-container button {
+    input[type="submit"] {
       background-color: #4CAF50;
       color: white;
       padding: 10px 15px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      margin: 0 10px;
+      width: 100%;
       font-size: 16px;
-      text-decoration: none;
-      transition: background-color 0.3s ease; /* Add a smooth transition effect */
     }
 
-    .button-container button:hover {
+    input[type="submit"]:hover {
       background-color: #45a049;
+    }
+
+    /* Alert Styles */
+    .alert {
+      display: none;
+      background-color: #f1f1f1;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+    }
+
+    .alert.success {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .alert.error {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    .alert.show {
+      display: flex;
+    }
+
+    /* Overlay Styles */
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+      display: none;
+    }
+
+    .background-overlay.show {
+      display: block;
+    }
+
+    /* Logout Styles */
+    #logout-button {
+      background-color: #f44336;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="background-container">
-    <img class="background-image" src="https://media.istockphoto.com/id/940118920/photo/ripe-pomegranate-fruit-and-one-cut-in-half-with-leaf.jpg?s=612x612&w=0&k=20&c=iVTrJvW6rtFTlsWk5J3v1r1NeCgNtZMD4qDJIh3sfik=" alt="Background Image">
+  <h1>Login to continue.. </h1>
+  
+  <div class="container">
+    <form id="login-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <input type="submit" value="Login">
+    </form>
   </div>
 
-  <div class="content-container">
-    <h1>Welcome to Pomegranate Data Management System</h1>
-
-    <div class="section">
-      <h2>Expenses Data</h2>
-      <div class="button-container">
-        <button onclick="location.href='EntryExpenses.html'">Entry Expenses</button>
-        <button onclick="location.href='ViewExpenses.html'">View Expenses</button>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Pesticide Data</h2>
-      <div class="button-container">
-        <button onclick="location.href='EntryPesticides.html'">Entry Pesticides</button>
-        <button onclick="location.href='SearchPesticide.html'">Search Pesticide</button>
-      </div>
-    </div>
+  <div id="alertSuccess" class="alert success">
+    <p>Login successful!</p>
   </div>
+  <div id="alertError" class="alert error">
+    <p>Invalid username or password. Please try again.</p>
+  </div>
+
+  <div id="backgroundOverlay" class="background-overlay"></div>
 
   <script>
-    window.onload = function() {
-      const sections = document.querySelectorAll('.section');
-      sections.forEach((section, index) => {
-        section.style.animationDelay = `${0.3 + index * 0.3}s`; /* Delay each section's animation */
-        section.style.opacity = '1'; /* Show the section */
-      });
-    }
-  </script>
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent form submission
 
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+
+      // Call Google Sheets API to validate credentials
+      var url = "https://script.google.com/macros/s/AKfycbxnc1z7-0zmWnLrrEBrrV6cOJdFdwdm62v39X-3xfOMK4IVLqHgJA_arCD-xPW8bpERuw/exec?username=" + username + "&password=" + password;
+
+      fetch(url)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          if (data.success === true) {
+            // Credentials are valid, show success alert and redirect to Welcome.html
+            showAlert("alertSuccess");
+            setTimeout(function() {
+              hideAlert("alertSuccess");
+              setLoggedUser(username);
+              window.location.href = "Welcome.html";
+            }, 2000);
+          } else {
+            // Display an error message for invalid credentials and reset the password field
+            showAlert("alertError");
+            document.getElementById("password").value = "";
+          }
+        })
+        .catch(function(error) {
+          console.log("Error:", error);
+        });
+    });
+
+    function showAlert(alertId) {
+      var alertElement = document.getElementById(alertId);
+      alertElement.classList.add("show");
+      showOverlay();
+      setTimeout(function() {
+        hideAlert(alertId);
+      }, 2000);
+    }
+
+    function hideAlert(alertId) {
+      var alertElement = document.getElementById(alertId);
+      alertElement.classList.remove("show");
+      hideOverlay();
+    }
+
+    function showOverlay() {
+      document.getElementById("backgroundOverlay").classList.add("show");
+    }
+
+    function hideOverlay() {
+      document.getElementById("backgroundOverlay").classList.remove("show");
+    }
+
+    function setLoggedUser(username) {
+      localStorage.setItem("loggedUser", username);
+    }
+
+    // Check if the user is already logged in
+    window.addEventListener("DOMContentLoaded", function() {
+      var loggedUser = localStorage.getItem("loggedUser");
+
+      if (loggedUser) {
+        showAlert("alertSuccess");
+        setTimeout(function() {
+          hideAlert("alertSuccess");
+          window.location.href = "Welcome.html";
+        }, 2000);
+      }
+    });
+
+    // Logout functionality
+    function logout() {
+      localStorage.removeItem("loggedUser");
+      window.location.href = "index.html";
+    }
+
+  </script>
 </body>
 </html>
+<script>
+  // Check if the user is not logged in and on index.html
+  const loggedUser = localStorage.getItem('loggedUser');
+  if (!loggedUser && window.location.href.includes('index.html')) {
+    history.replaceState(null, null, 'index.html'); // Replace the history entry with index.html
+  }
+</script>
