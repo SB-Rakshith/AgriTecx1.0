@@ -153,6 +153,9 @@
 
           // Exclude the first row (header)
           rows.shift();
+          
+          // Reverse the rows array
+          rows.reverse();
 
           var totalAmount = 0;
           rows.forEach(function(row) {
