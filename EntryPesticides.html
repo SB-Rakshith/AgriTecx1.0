@@ -3,10 +3,10 @@
 <head>
   <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkvbEtitcha7SYSrUXwncayqf5013jyAGVx1nbZdbb&s" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pesticide Entry</title>
+  <title>Entry Pesticides</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
   <style>
-    body {
+        body {
       font-family: 'Montserrat', sans-serif;
       margin: 20px;
       padding: 0;
@@ -115,10 +115,42 @@
     .background-overlay.show {
       display: block;
     }
+
+
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .header .username {
+      margin-right: 10px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .header button {
+      background-color: #f44336;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .header button:hover {
+      background-color: #d32f2f;
+    }
   </style>
 </head>
 <body>
-  <h1>Pesticide Entry Form</h1>
+  <div class="header">
+    <span class="username" id="username"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <h1>Pesticide Data Form</h1>
   <form id="pesticideForm">
     <label for="pesticideName">Pesticide Name:</label>
     <input type="text" id="pesticideName" name="pesticideName" required>
@@ -147,6 +179,17 @@
   <div id="backgroundOverlay" class="background-overlay"></div>
 
   <script>
+    window.onload = function() {
+      var usernameElement = document.getElementById('username');
+      var loggedUser = localStorage.getItem('loggedUser');
+
+      if (loggedUser) {
+        usernameElement.textContent = "Logged in as: " + loggedUser;
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
     document.getElementById("pesticideForm").addEventListener("submit", function(e) {
       e.preventDefault();
       var form = e.target;
@@ -156,9 +199,6 @@
       for (var pair of formData.entries()) {
         payload[pair[0]] = pair[1];
       }
-      
-      var comment = document.getElementById("comment").value;
-      payload["comment"] = comment;
 
       showOverlay();
 
@@ -201,6 +241,11 @@
 
     function hideOverlay() {
       document.getElementById("backgroundOverlay").classList.remove("show");
+    }
+
+    function logout() {
+      localStorage.removeItem('loggedUser');
+      window.location.href = 'index.html';
     }
   </script>
 </body>
