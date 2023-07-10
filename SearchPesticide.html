@@ -70,9 +70,40 @@
       background-color: #f2f2f2;
       font-weight: bold;
     }
+
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .header .username {
+      margin-right: 10px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .header button {
+      background-color: #f44336;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .header button:hover {
+      background-color: #d32f2f;
+    }
   </style>
 </head>
 <body>
+  <div class="header">
+    <span class="username" id="username"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+
   <h1>Search Pesticide</h1>
   <form id="search-form">
     <label for="date-input">Search by Date:</label>
@@ -88,6 +119,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
+    window.onload = function() {
+      var usernameElement = document.getElementById('username');
+      var loggedUser = localStorage.getItem('loggedUser');
+
+      if (loggedUser) {
+        usernameElement.textContent = "Logged in as: " + loggedUser;
+      } else {
+        window.location.href = 'index.html';
+      }
+    };
+
     document.getElementById('search-form').addEventListener('submit', function(event) {
       event.preventDefault(); // Prevent form submission
 
@@ -179,6 +221,11 @@
           dataContainer.innerHTML = '<p>An error occurred. Please try again.</p>';
         });
     });
+
+    function logout() {
+      localStorage.removeItem('loggedUser');
+      window.location.href = 'index.html';
+    }
   </script>
 </body>
 </html>
