@@ -151,7 +151,7 @@
 </head>
 <body>
   <div class="header">
-    <div class="username" id="username"></div>
+    <p> Logged in as: <div class="username" id="username"></div> </p>
     <button onclick="logout()">Logout</button>
   </div>
 
@@ -189,7 +189,7 @@
       const loggedUser = localStorage.getItem('loggedUser');
 
       if (loggedUser) {
-        usernameElement.textContent = 'Logged in as: ' + loggedUser;
+        usernameElement.textContent =  loggedUser;
       } else {
         window.location.href = 'index.html'; // Redirect to index.html if not logged in
       }
