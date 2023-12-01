@@ -179,34 +179,21 @@
   <div id="backgroundOverlay" class="background-overlay"></div>
 
   <script>
-     window.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener('DOMContentLoaded', function() {
       const urlParams = new URLSearchParams(window.location.search);
       const appParam = urlParams.get('app');
 
-      if (appParam == 'agritecx-version-1.0.1') {
-        // Hide the main content
+      if (appParam === 'agritecx-version-1.0.1') {
         document.querySelector('.container').style.display = 'block';
 
-                  // Check if the user is already logged in
-              window.addEventListener("DOMContentLoaded", function() {
-                var loggedUser = localStorage.getItem("loggedUser");
+        // Check if the user is already logged in
+        var loggedUser = localStorage.getItem("loggedUser");
 
-                if (loggedUser) {
-                  showAlert("alertSuccess");
-                  setTimeout(function() {
-                    hideAlert("alertSuccess");
-                    window.location.href = "Welcome.html";
-                  }, 2000);
-                }
-              });
-
-              // Logout functionality
-              function logout() {
-                localStorage.removeItem("loggedUser");
-                window.location.href = "index.html";
-              }
-      }else{
-        // Show a message
+        if (loggedUser) {
+          // If logged in, redirect to Welcome.html
+          window.location.href = "Welcome.html";
+        }
+      } else {
         document.getElementById('errorMessage').style.display = 'block';
       }
     });
@@ -271,7 +258,24 @@
       localStorage.setItem("loggedUser", username);
     }
 
-    
+    // Check if the user is already logged in
+    window.addEventListener("DOMContentLoaded", function() {
+      var loggedUser = localStorage.getItem("loggedUser");
+
+      if (loggedUser) {
+        showAlert("alertSuccess");
+        setTimeout(function() {
+          hideAlert("alertSuccess");
+          window.location.href = "Welcome.html";
+        }, 2000);
+      }
+    });
+
+    // Logout functionality
+    function logout() {
+      localStorage.removeItem("loggedUser");
+      window.location.href = "index.html";
+    }
 
   </script>
 </body>
