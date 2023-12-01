@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkvbEtitcha7SYSrUXwncayqf5013jyAGVx1nbZdbb&s" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Pesticide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Inter", sans-serif; /* Apply Inter font to the entire document */
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      color: #f1f1f1;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0 30px;
+    }
+
+    /* Dark mode form elements */
+    form {
+      max-width: 300px;
+      margin: 0 auto;
+      background-color: #111111; /* Dark background color */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #222222; /* Darker border color */
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      resize: vertical;
+      background-color: #000000; /* Pure black for AMOLED screens */
+      color: #f1f1f1; /* Light text color */
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50; /* Green color */
+      color: white;
+      border: none;
+      width: 100%;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s, color 0.3s;
+      padding: 10px 15px;
+      font-family: "Inter", sans-serif;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #45a049; /* Darker green on hover */
+      color: #ffffff;
+    }
+
+    /* Modernized Alert Styles */
+    .alert {
+      display: none;
+      background-color: #000000; /* Pure black for AMOLED screens */
+      color: #f1f1f1; /* Light alert text color */
+      text-align: center;
+      padding: 20px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+      max-width: 400px;
+    }
+
+    .alert.success {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .alert.error {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    .alert.show {
+      display: flex;
+    }
+
+    .alert .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #f1f1f1; /* Light close button color */
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .background-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8); /* Darker overlay for contrast */
+      z-index: 9998;
+      display: none;
+    }
+
+    .background-overlay.show {
+      display: block;
+    }
+
+
+    .header {
+      display: flex;
+      justify-content: space-between; /* Align items evenly */
+      align-items: center; /* Center vertically */
+      padding: 10px 20px;
+      background-color: #111111;
+      color: #f1f1f1;
+    }
+
+    .header .username  {
+      color:#4CAF50 ; 
+    }
+
+    .header button {
+      background-color: red; /* Change button color to red */
+      color: white;
+      border: 1px solid #ff0000; /* Adjust border color to match */
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background-color 0.3s, color 0.3s;
+      padding: 5px 5px;
+    }
+
+    .header button:hover {
+      background-color: #d60000; /* Darker red on hover */
+      color: #ffffff; /* White text on hover */
+    }
+
+    #data-container {
+      margin-top: 30px;
+    }
+
+    #data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #111111;
+      color: #f1f1f1;
+    }
+
+  #data-table th {
+    background-color: #90EE90; /* Set full white background */
+    color: #000000; /* Set font color to black for visibility */
+    font-weight: bold;
+    padding: 8px; /* Add padding for better appearance */
+    border: 1px solid #ccc;
+    text-align: left; /* Align header text to the left */
+  }
+
+  #data-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  </style>
+</head>
+<body>
+  <div class="header">
+    <p> Logged in as: <span class="username" id="username"></span></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <h1>Search Pesticide</h1>
+  <form id="search-form">
+    <label for="date-input">Search by Date:</label>
+    <input type="date" id="date-input">
+    <br>
+    <label for="pesticide-input">Search by Pesticide:</label>
+    <input type="text" id="pesticide-input">
+    <br>
+    <button type="submit">Search</button>
+  </form>
+  <br>
+  <div id="data-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    window.onload = function() {
+      var usernameElement = document.getElementById('username');
+      var loggedUser = localStorage.getItem('loggedUser');
+
+      if (loggedUser) {
+        usernameElement.textContent =   loggedUser;
+      } else {
+        window.location.href = 'index.html';
+      }
+    };
+
+    document.getElementById('search-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get the input values
+      const date = document.getElementById('date-input').value;
+      const pesticide = document.getElementById('pesticide-input').value;
+
+      // Make an API request to retrieve data
+      const url = 'https://sheets.googleapis.com/v4/spreadsheets/1ie83mP01viUZL7KZcRXr6dHpCgxFZl1vimwoUE2_uRo/values/Pesticide!A1:D100?key=AIzaSyAUG7ufFjEGIDuDtFAi2rCufLKA4sBgDmg';
+      axios.get(url)
+        .then(function(response) {
+          const data = response.data.values;
+          const filteredData = [];
+
+          // Filter data based on the input values
+          for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+            const rowData = {
+              pesticide: row[0],
+              gram_ml: row[1],
+              date: row[2],
+              description: row[3]
+            };
+
+            if ((date && rowData.date === date) || (pesticide && rowData.pesticide.toLowerCase().includes(pesticide.toLowerCase()))) {
+              filteredData.push(rowData);
+            }
+          }
+
+          // Display the filtered data
+          const dataContainer = document.getElementById('data-container');
+          dataContainer.innerHTML = '';
+
+          if (filteredData.length > 0) {
+            const table = document.createElement('table');
+            table.id = 'data-table';
+
+            // Create table header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            const headers = ['Pesticide Name', 'Gram/ML', 'Date', 'Description'];
+
+            for (let i = 0; i < headers.length; i++) {
+              const th = document.createElement('th');
+              th.textContent = headers[i];
+              headerRow.appendChild(th);
+            }
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create table rows
+            const tbody = document.createElement('tbody');
+
+            for (let i = 0; i < filteredData.length; i++) {
+              const rowData = filteredData[i];
+              const row = document.createElement('tr');
+
+              const pesticideCell = document.createElement('td');
+              pesticideCell.textContent = rowData.pesticide;
+              row.appendChild(pesticideCell);
+
+              const gramMlCell = document.createElement('td');
+              gramMlCell.textContent = rowData.gram_ml;
+              row.appendChild(gramMlCell);
+
+              const dateCell = document.createElement('td');
+              dateCell.textContent = rowData.date;
+              row.appendChild(dateCell);
+
+              const descriptionCell = document.createElement('td');
+              descriptionCell.textContent = rowData.description;
+              row.appendChild(descriptionCell);
+
+              tbody.appendChild(row);
+            }
+
+            table.appendChild(tbody);
+            dataContainer.appendChild(table);
+          } else {
+            const message = document.createElement('p');
+            message.textContent = 'No data found.';
+            dataContainer.appendChild(message);
+          }
+        })
+        .catch(function(error) {
+          console.error(error);
+          const dataContainer = document.getElementById('data-container');
+          dataContainer.innerHTML = '<p>An error occurred. Please try again.</p>';
+        });
+    });
+
+    function logout() {
+      localStorage.removeItem('loggedUser');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
