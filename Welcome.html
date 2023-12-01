@@ -3,257 +3,187 @@
 <head>
   <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkvbEtitcha7SYSrUXwncayqf5013jyAGVx1nbZdbb&s" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pomegranate Data Management Login</title>
+  <title>Pomegranate Data Management</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: "Inter", sans-serif; /* Apply Inter font to the entire document */
+      font-family: "Inter", sans-serif;
       margin: 0;
       padding: 0;
       background-color: #000000;
       color: #f1f1f1;
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    /* Login Form Styles */
-    .container {
-      max-width: 300px;
-      margin: 0 auto;
-      background-color: #111111; /* Dark background color */
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #555;
-      box-sizing: border-box;
-      margin-bottom: 15px;
-      resize: vertical;
-      background-color: #333;
-      color: #f1f1f1;
-    }
-
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
-
-    /* Alert Styles */
-    .alert {
-      display: none;
-      background-color: #252525;
-      color: #f1f1f1;
-      text-align: center;
-      padding: 20px;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 9999;
-      border-radius: 4px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-    }
-
-    .alert.success {
-      background-color: #4CAF50;
-      color: #fff;
-    }
-
-    .alert.error {
-      background-color: #f44336;
-      color: #fff;
-    }
-
-    .alert.show {
-      display: flex;
-    }
-
-    /* Overlay Styles */
-    .background-overlay {
+    .background-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 9998;
-      display: none;
+      z-index: -1;
+      overflow: hidden;
+      opacity: 0.3;
     }
 
-    .background-overlay.show {
-      display: block;
+    .background-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    /* Logout Styles */
-    #logout-button {
-      background-color: #f44336;
+    .content-container {
+      padding: 20px;
+      background-color: #111111;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+      max-width: 300px;
+      margin: 0 auto;
+      margin-top: 50px;
+      animation: fade-in 1s ease;
+    }
+
+    h2 {
+      text-align: center;
+      color: #f1f1f1;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      text-align: center;
+      opacity: 0;
+      animation: fade-in 1s ease forwards;
+    }
+
+  
+    .section:nth-child(1) {
+      animation-delay: 0.3s;
+    }
+
+    .section:nth-child(2) {
+      animation-delay: 0.6s;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .button-container button {
+      background-color: #4CAF50;
       color: white;
-      padding: 10px 15px;
+      padding: 10px 12px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      width: 100%;
-      font-size: 16px;
+      margin: 0 10px;
+      font-size: 14px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-container button:hover {
+      background-color: #45a049;
+    }
+
+    .username {
+      text-align: center;
       margin-top: 20px;
+      color: #f1f1f1;
+    }
+    .username span{ color:#4CAF50 }
+
+    .logout-button {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .logout-button button {
+      background-color: #d60000;
+      color: white;
+      padding: 5px 7px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 auto;
+      font-size: 15px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button button:hover {
+      background-color: #d32f2f;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Login to continue.. </h2>
-    <form id="login-form">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
+  
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+  <div class="content-container">
+    <h2>Pomegranate Data Management System</h2>
 
-      <input type="submit" value="Login">
-    </form>
+    <div class="username">
+      <p>Logged in as: <span id="username"></span></p>
+    </div>
+
+    <div class="section">
+      <h3>Expenses Data</h3>
+      <div class="button-container">
+        <button onclick="location.href='EntryExpenses.html'">Entry Expenses</button>
+        <button onclick="location.href='ViewExpenses.html'">View Expenses</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Pesticide Data</h3>
+      <div class="button-container">
+        <button onclick="location.href='EntryPesticides.html'">Entry Pesticides</button>
+        <button onclick="location.href='SearchPesticide.html'">Search Pesticide</button>
+      </div>
+    </div>
+
+    <div class="logout-button">
+      <button onclick="logout()">Logout</button>
+    </div>
   </div>
-
-  <div id="alertSuccess" class="alert success">
-    <p>Login successful!</p>
-  </div>
-  <div id="alertError" class="alert error">
-    <p>Invalid username or password. Please try again.</p>
-  </div>
-
-  <div id="backgroundOverlay" class="background-overlay"></div>
-
   <script>
-     window.addEventListener('DOMContentLoaded', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const appParam = urlParams.get('app');
-
-      if (appParam !== 'com.agritecx') {
-        // Hide the main content
-        document.querySelector('.container').style.display = 'none';
-
-        // Show a message
-        const errorMessage = document.createElement('p');
-        errorMessage.textContent = 'This webpage cannot be viewed on this browser. Please download the new AgriTecX app from the link below.';
-        document.body.appendChild(errorMessage);
-
-        // Add a link for downloading the app
-        const downloadLink = document.createElement('a');
-        downloadLink.textContent = 'Download the AgriTecX app';
-        downloadLink.href = 'YOUR_DOWNLOAD_LINK_HERE'; // Replace with the actual download link
-        document.body.appendChild(downloadLink);
-      }
-    });
-
-    document.getElementById("login-form").addEventListener("submit", function(event) {
-      event.preventDefault(); // Prevent form submission
-
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
-
-      // Call Google Sheets API to validate credentials
-      var url = "https://script.google.com/macros/s/AKfycbxnc1z7-0zmWnLrrEBrrV6cOJdFdwdm62v39X-3xfOMK4IVLqHgJA_arCD-xPW8bpERuw/exec?username=" + username + "&password=" + password;
-
-      fetch(url)
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data) {
-          if (data.success === true) {
-            // Credentials are valid, show success alert and redirect to Welcome.html
-            showAlert("alertSuccess");
-            setTimeout(function() {
-              hideAlert("alertSuccess");
-              setLoggedUser(username);
-              window.location.href = "Welcome.html";
-            }, 2000);
-          } else {
-            // Display an error message for invalid credentials and reset the password field
-            showAlert("alertError");
-            document.getElementById("password").value = "";
-          }
-        })
-        .catch(function(error) {
-          console.log("Error:", error);
-        });
-    });
-
-    function showAlert(alertId) {
-      var alertElement = document.getElementById(alertId);
-      alertElement.classList.add("show");
-      showOverlay();
-      setTimeout(function() {
-        hideAlert(alertId);
-      }, 2000);
-    }
-
-    function hideAlert(alertId) {
-      var alertElement = document.getElementById(alertId);
-      alertElement.classList.remove("show");
-      hideOverlay();
-    }
-
-    function showOverlay() {
-      document.getElementById("backgroundOverlay").classList.add("show");
-    }
-
-    function hideOverlay() {
-      document.getElementById("backgroundOverlay").classList.remove("show");
-    }
-
-    function setLoggedUser(username) {
-      localStorage.setItem("loggedUser", username);
-    }
-
-    // Check if the user is already logged in
-    window.addEventListener("DOMContentLoaded", function() {
-      var loggedUser = localStorage.getItem("loggedUser");
+    window.onload = function() {
+      const usernameElement = document.getElementById('username');
+      const loggedUser = localStorage.getItem('loggedUser');
 
       if (loggedUser) {
-        showAlert("alertSuccess");
-        setTimeout(function() {
-          hideAlert("alertSuccess");
-          window.location.href = "Welcome.html";
-        }, 2000);
+        usernameElement.textContent = loggedUser;
       }
-    });
-
-    // Logout functionality
-    function logout() {
-      localStorage.removeItem("loggedUser");
-      window.location.href = "index.html";
     }
+
+    function logout() {
+      localStorage.removeItem('loggedUser');
+      window.location.href = 'index.html';
+    }
+    window.onload = function() {
+  const sections = document.querySelectorAll('.section');
+  sections.forEach((section, index) => {
+    section.style.animationDelay = `${0.3 + index * 0.3}s`; /* Delay each section's animation */
+    section.style.opacity = '1'; /* Show the section */
+  });
+
+  const usernameElement = document.getElementById('username');
+  const loggedUser = localStorage.getItem('loggedUser');
+
+  if (loggedUser) {
+    usernameElement.textContent = loggedUser;
+  } else {
+    window.location.href = 'index.html'; // Redirect to index.html if not logged in
+  }
+}
+
+function logout() {
+  localStorage.removeItem('loggedUser');
+  window.location.href = 'index.html';
+}
 
   </script>
 </body>
 </html>
-<script>
-  // Check if the user is not logged in and on index.html
-  const loggedUser = localStorage.getItem('loggedUser');
-  if (!loggedUser && window.location.href.includes('index.html')) {
-    history.replaceState(null, null, 'index.html'); // Replace the history entry with index.html
-  }
-</script>
