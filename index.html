@@ -28,7 +28,6 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
-      display: none;
     }
 
     label {
@@ -123,41 +122,13 @@
       font-size: 16px;
       margin-top: 20px;
     }
-     #errorMessage {
-      max-width: 300px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #d32f2f;
-      color: #fff;
-      text-align: center;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-      display: none;
-    }
-
-    #errorMessage a {
-      display: block;
-      margin-top: 15px;
-      text-decoration: none;
-      color: #fff;
-      background-color: #4CAF50;
-      padding: 10px 15px;
-      border-radius: 4px;
-    }
-
-    #errorMessage a:hover {
-      background-color: #45a049;
-    }
   </style>
 </head>
 <body>
-  <div id="errorMessage">
-    <p>This webpage cannot be viewed on this browser. Please download the new AgriTecX app from the link below.</p>
-    <a href="YOUR_DOWNLOAD_LINK_HERE">Download the AgriTecX app</a>
-  </div>
-
+  
   <div class="container">
-    <h2>Login to continue.. </h2>
+  <h2>Login to continue.. </h2>
+
     <form id="login-form">
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required>
@@ -179,25 +150,6 @@
   <div id="backgroundOverlay" class="background-overlay"></div>
 
   <script>
-      window.addEventListener('DOMContentLoaded', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const appParam = urlParams.get('app');
-
-      if (appParam === 'agritecx-version-1.0.1') {
-        document.querySelector('.container').style.display = 'block';
-
-        // Check if the user is already logged in
-        var loggedUser = localStorage.getItem("loggedUser");
-
-        if (loggedUser) {
-          // If logged in, redirect to Welcome.html
-          window.location.href = "Welcome.html";
-        }
-      } else {
-        document.getElementById('errorMessage').style.display = 'block';
-      }
-    });
-
     document.getElementById("login-form").addEventListener("submit", function(event) {
       event.preventDefault(); // Prevent form submission
 
